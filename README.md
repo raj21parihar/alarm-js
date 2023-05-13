@@ -30,7 +30,7 @@ This is a Alarm Projec based on Vanilla Javascript. Any other JavaScript librari
 To get started with this authentication system, follow the instructions below:
 
 1. Clone this repository to your local machine.
-2. click on index.js to start the project.
+2. click on index.html to start the project.
 
 ## Dependencies
 
