@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+            background-repeat: no-repeat;
+            scroll-behavior: smooth;
+        }
+
+        .alarm-region {
+            justify-content: center;
+            align-items: center;
+            padding: 3vh 3vw;
+            margin: 6vh 3vw;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        ul {
+            height: 76vh;
+            overflow-y: auto;
+        }
+
+        li {
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        #current-time {
+            font-size: 100px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            padding-top: 5%;
+            padding-bottom: 5%;
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            border-radius: 10px;
+            background-color: #7dcfc0;
+            opacity: 0.6;
+
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #3392a3;
+            border-radius: 10px;
+            opacity: 0.5;
+
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .fa-trash {
+            color: #e64141;
+        }
+
+        .form-control {
+            min-width: 4rem;
+            opacity: 0.6;
+            font-weight: bold;
+        }
+
+        #current-time {
+            transition-timing-function: ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row alarm-region">
+            <div class="col pb-3">
+                <p id="current-time">--:--:-- --</p>
+                <div class="row g-3">
+                    <div class="col">
+                        <input type="number" id="hour" min="1" max="12" class="form-control" placeholder="HH"
+                            aria-label="hh">
+                    </div>
+                    <div class="col">
+                        <input type="number" id="min" min="0" max="60" class="form-control" placeholder="MM"
+                            aria-label="mm">
+                    </div>
+                    <div class="col">
+                        <input type="number" id="sec" min="0" max="60" class="form-control" placeholder="SS"
+                            aria-label="mm">
+                    </div>
+                    <div class="col">
+                        <select class="form-control custom-input" id="zone">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </div>
+                    <div class="col mx-auto">
+                        <input type="submit" onclick="addAlerm()" class="btn btn-info" value="Set Alarm">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h5 style="text-align:center">Active Alarms</h5>
+                <ul class="list-group rounded-0" id="alarm-list">
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let alarm = [];
+
+    function showTime() {
+        let currentTime = new Date();
+        let hh = currentTime.getHours();
+        let mm = currentTime.getMinutes();
+        let ss = currentTime.getSeconds();
+        let zone = hh >= 12 ? "PM" : "AM";
+        hh = hh % 12;
+        hh = hh < 10 ? "0" + hh : hh;
+        mm = mm < 10 ? "0" + mm : mm;
+        ss = ss < 10 ? "0" + ss : ss;
+        let displayTime = `${hh}:${mm}:${ss} ${zone}`;
+        document.getElementById("current-time").innerHTML = displayTime;
+        if (alarm.includes(displayTime)) {
+            alert("Hello!! Alarm is ringing!");
+        }
+    }
+    setInterval(showTime, 1000);
+
+    function addAlerm() {
+        let hour = +document.getElementById("hour").value;
+        let min = +document.getElementById("min").value;
+        let sec = +document.getElementById("sec").value;
+        let zone = document.getElementById("zone").value;
+        hour = hour < 10 ? "0" + hour : hour;
+        min = min < 10 ? "0" + min : min;
+        sec = sec < 10 ? "0" + sec : sec;
+        let alarmTime = `${hour}:${min}:${sec} ${zone}`;
+        let index = alarm.push(alarmTime);
+        let = newAlarm = `<li id="alarm-${index}" class="alerm-item d-flex justify-content-between align-items-center p-3">${alarmTime} <a href="#" onclick='removeAlerm(${index})'><i class="fa-solid fa-trash"></i></li>`;
+        document.getElementById("alarm-list").innerHTML += newAlarm;
+        document.getElementById("hour").value = "";
+        document.getElementById("min").value = "";
+        document.getElementById("sec").value = "";
+        document.getElementById("zone").value = "AM";
+    }
+
+    function removeAlerm(index) {
+        alarm[index - 1] = "";
+        let element = document.getElementById("alarm-" + index);
+        element.classList.remove("d-flex");
+        element.style.display = "none";
+    }
+</script>
+</html>
